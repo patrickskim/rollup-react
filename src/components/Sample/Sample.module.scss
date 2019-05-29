@@ -1,0 +1,16 @@
+.Sample {
+  background: green;
+
+  .sub-child {
+    color: blue;
+  }
+
+  p { color: orange; }
+}
+
+p { background: yellow; }
+
+.other {
+  color: red;
+}
+
