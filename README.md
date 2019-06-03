@@ -3,7 +3,7 @@
 Create a simple react app that displays an order book based on real live data.
 
 * Runs locally and follows best practices concerning JS and CSS.
-* Uses JavaScript, React, PostCSS, SCSS
+* Uses JavaScript, React, SCSS
 
 The order book automatically updates every 5 seconds and uses live data from:
 `https://exchange.itbit.com/api/feeds/orderbook/XBTUSD`.
@@ -23,17 +23,22 @@ Noticed the semi-hidden complexity of rolling up pricing.
 It is preferred that filtering and roll-up calculation be handled server-side.
 
 Outside of a time constraints:
-- Organize files into seperate components. App, Updater, Orderbook, OrderbookRow.
-- Consider generalizing `<Row />` to dynamically spread `props` so that it can display `n` columns.
-- Use or write a util to handle Number formatting `$n,nnn.nn`.
+- Organize files into seperate components. App, Updater, Orderbook, TableRow.
+- Consider generalizing `<TableRow />` to dynamically spread `props` so that it can display `n` columns.
+- Consider spreading `orders` across `<Orderbook {...orders} />`.
+- Use or write a util to handle Number formatting `$n,nnn.nn`, decrease requirement for client-side support.
 - Use a math library or recommend calculating on the backend, Javascript float math is imprecise.
 - Include unit + snapshot tests across atomic components & application logic.
-- Validate API before rendering, in the interest of time, assumptions were made on data validity.
-- Consider supporting Realtime adjustments vs polling via pubsub or shorter intervals.
-- Consider calculating rolling averages vs snapshots based on "request" redraws.
 - App could be expanded to cover request-level error handling and validation and include fail states with retry logic.
+- Validate API before rendering, in the interest of time, assumptions were made on data validity.
 - Check for cross-browser compatability (dependent on supported browsers).
 - Performance test/optimize (dependent on avg user device, use case scenario, ideally determined before development.)
+- Remove babel-polyfill, use `Promises` to fetch over async/await.
+
+Nice to haves
+- Consider supporting Realtime adjustments vs polling via pubsub or shorter intervals.
+- Consider calculating rolling averages vs snapshots based on "request" redraws.
+- Consider substituting Rollup with Webpack. (Wider developer support)
 
 2. Suppose this app were to include additional features such as customer information and charts. How would you manage this increased complexity in your solution?
 

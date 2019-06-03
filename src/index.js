@@ -2,17 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Orderbook from './components/Orderbook';
-import orders from '../data/sample.json';
+// import orders from '../data/sample.json';
 
-const title = "test";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { orders: null };
+  }
 
-console.log("staart?", orders)
+  componentDidMount() {
+    this.pollData(5000);
+  }
 
-const App = () => (
-  <div id="hi">
-    <Orderbook orders={orders} />
-  </div>
-);
+  async pollData(interval = 1000) {
+    const URL = 'https://exchange.itbit.com/api/feeds/orderbook/XBTUSD';
+
+    let response = await fetch(URL);
+    let json = await response.json();
+
+    this.setState({ orders: json });
+    setTimeout(() => { this.pollData(interval) }, interval);
+  }
+
+  render() {
+    const { orders } = this.state;
+
+    return (
+      <div id="Application">
+        { orders ? <Orderbook orders={orders} /> : 'Loading' }
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(
   <App />,

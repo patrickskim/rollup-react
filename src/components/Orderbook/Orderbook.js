@@ -1,14 +1,6 @@
 import React from 'react';
 import PropTypes from 'react-proptypes';
-import classNames from 'classnames/bind';
 import styles from './Orderbook.module.scss'
-
-const cx = classNames.bind(styles);
-
-console.log('another', styles)
-
-// TODO better name
-const calc = ({ price, quantity }) => ({ });
 
 const Row = (props)  => {
   const { price, quantity, total } = props;
@@ -21,7 +13,7 @@ const Row = (props)  => {
   );
 };
 
-// TODO generalize fmt
+// TODO generalize fmt or use a lib
 const fmt$ = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
 const fmtBTC = (num) => new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 6, minimumIntegerDigits: 1 }).format(num);
 const fmtUSD = (num) => new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
@@ -69,8 +61,8 @@ const Orderbook = (props) => {
   }
 
   const avg = calcAvg(orders);
-  const bids = renderRows(orders.bids);
-  const asks = renderRows(orders.asks);
+  const bids = renderRows(orders.bids, viewLimit);
+  const asks = renderRows(orders.asks, viewLimit);
 
   return (
     <div className={styles.Sample}>
