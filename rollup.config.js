@@ -5,6 +5,7 @@ import replace from 'rollup-plugin-replace';
 import commonjs from 'rollup-plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssModules from 'postcss-modules';
+import json from 'rollup-plugin-json';
 
 const cssExportMap = {};
 
@@ -27,5 +28,6 @@ export default {
       exclude: 'node_modules/**'
     }),
     commonjs(),
+    json(),
   ],
 };

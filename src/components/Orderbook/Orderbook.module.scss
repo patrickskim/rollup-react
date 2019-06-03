@@ -1,0 +1,57 @@
+.Sample {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  line-height: 1em;
+
+  tbody {
+    position: relative;
+    margin: 10px 0;
+  }
+
+  th {
+    background: red;
+    padding: 15px 0;
+  }
+
+  td {
+    position: relative;
+    padding: 7px 0;
+    text-align: center;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      color: blue;
+      text-align: right;
+    }
+  }
+
+  .asks td:first-child {
+    color: green;
+  }
+
+  .bids td:first-child  {
+    color: red;
+  }
+
+  .avg {
+    font-size: 20px;
+    text-align: center;
+
+    td {
+      padding: 15px 0;
+
+      font-size: 20px;
+      text-align: center;
+
+      border: 2px solid #eee;
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+}
+
+
+

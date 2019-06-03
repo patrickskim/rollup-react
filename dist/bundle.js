@@ -530,8 +530,6 @@
 	}
 	});
 
-	var reactProptypes = propTypes;
-
 	var bind = createCommonjsModule(function (module) {
 	/*!
 	  Copyright (c) 2017 Jed Watson.
@@ -578,33 +576,3289 @@
 	}());
 	});
 
-	var styles = {"Sample":"Sample-module_Sample__Mmj22","sub-child":"Sample-module_sub-child__3zCbK","other":"Sample-module_other__dEqz3"};
+	var styles = {"Sample":"Sample-module_Sample__Mmj22","asks":"Sample-module_asks__Ok8OE","bids":"Sample-module_bids__2iawl","avg":"Sample-module_avg__27n9x"};
 
 	var cx = bind.bind(styles);
-	console.log('another', styles);
+	console.log('another', styles); // TODO better name
 
-	var Sample = function Sample(_ref) {
-	  var _ref$message = _ref.message,
-	      message = _ref$message === void 0 ? 'this is an alert' : _ref$message;
-	  console.log(styles.other);
+	var Row = function Row(props) {
+	  var price = props.price,
+	      quantity = props.quantity,
+	      total = props.total;
+	  return react.createElement("tr", {
+	    key: price
+	  }, react.createElement("td", null, fmtUSD(price)), react.createElement("td", null, fmtBTC(quantity)), react.createElement("td", null, fmt$(total)));
+	}; // TODO generalize fmt
+
+
+	var fmt$ = function fmt$(num) {
+	  return new Intl.NumberFormat('en-US', {
+	    style: 'currency',
+	    currency: 'USD'
+	  }).format(num);
+	};
+
+	var fmtBTC = function fmtBTC(num) {
+	  return new Intl.NumberFormat('en-US', {
+	    style: 'decimal',
+	    minimumFractionDigits: 6,
+	    minimumIntegerDigits: 1
+	  }).format(num);
+	};
+
+	var fmtUSD = function fmtUSD(num) {
+	  return new Intl.NumberFormat('en-US', {
+	    style: 'decimal',
+	    minimumFractionDigits: 2,
+	    maximumFractionDigits: 2
+	  }).format(num);
+	};
+
+	var Sample = function Sample(props) {
+	  var orders = props.orders;
+
+	  function renderRows(orders) {
+	    var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+	    var rows = [];
+	    var prev = {};
+	    orders.forEach(function (order, idx) {
+	      var price = order.price,
+	          quantity = order.quantity;
+	      var total = price * quantity;
+
+	      if (idx == 0) {
+	        prev = {
+	          price: price,
+	          quantity: quantity,
+	          total: total
+	        };
+	        return false;
+	      }
+
+	      if (prev.price != price) {
+	        rows.push(react.createElement(Row, prev));
+	        prev = {
+	          price: price,
+	          quantity: quantity,
+	          total: total
+	        };
+	        return false;
+	      }
+
+	      prev.quantity = prev.quantity + quantity;
+	      prev.total = prev.total + total;
+	    });
+	    return rows.slice(0, limit);
+	  }
+
+	  function calcAvg(orders) {
+	    var bids = orders.bids,
+	        asks = orders.asks;
+	    var lowest = asks[0];
+	    var highest = bids[0];
+	    return (lowest.price + highest.price) / 2;
+	  }
+
+	  var avg = calcAvg(orders);
+	  var bids = renderRows(orders.bids);
+	  var asks = renderRows(orders.asks);
 	  return react.createElement("div", {
 	    className: styles.Sample
-	  }, react.createElement("span", null, message), react.createElement("p", null, "A child p"), react.createElement("div", {
-	    className: styles['sub-child']
-	  }, "Mo"));
+	  }, react.createElement("thead", null, react.createElement("th", null, "Price (USDT)"), react.createElement("th", null, "Amount (BTC)"), react.createElement("th", null, "Total")), react.createElement("tbody", {
+	    className: styles.bids
+	  }, bids), react.createElement("tr", {
+	    className: styles.avg
+	  }, react.createElement("td", {
+	    colspan: 3
+	  }, fmtUSD(avg))), react.createElement("tbody", {
+	    className: styles.asks
+	  }, asks));
+	}; // Sample.propTypes = {
+
+	var bids = [
+		{
+			quantity: 1.183,
+			price: 8597
+		},
+		{
+			quantity: 0.027,
+			price: 8595
+		},
+		{
+			quantity: 1.163,
+			price: 8593.75
+		},
+		{
+			quantity: 1,
+			price: 8593.75
+		},
+		{
+			quantity: 0.69149665,
+			price: 8593
+		},
+		{
+			quantity: 2,
+			price: 8588.5
+		},
+		{
+			quantity: 0.01198,
+			price: 8587
+		},
+		{
+			quantity: 1,
+			price: 8585.25
+		},
+		{
+			quantity: 0.1,
+			price: 8585
+		},
+		{
+			quantity: 2.64191153,
+			price: 8584.5
+		},
+		{
+			quantity: 5,
+			price: 8582.75
+		},
+		{
+			quantity: 1,
+			price: 8581.25
+		},
+		{
+			quantity: 1,
+			price: 8578.25
+		},
+		{
+			quantity: 1,
+			price: 8577.75
+		},
+		{
+			quantity: 6.563,
+			price: 8576
+		},
+		{
+			quantity: 0.50739999,
+			price: 8573
+		},
+		{
+			quantity: 0.16785955,
+			price: 8570
+		},
+		{
+			quantity: 5.7186,
+			price: 8569.75
+		},
+		{
+			quantity: 0.75,
+			price: 8568
+		},
+		{
+			quantity: 0.1,
+			price: 8568
+		},
+		{
+			quantity: 4.44628034,
+			price: 8568
+		},
+		{
+			quantity: 4.1378,
+			price: 8563.25
+		},
+		{
+			quantity: 0.1,
+			price: 8559.5
+		},
+		{
+			quantity: 8.3105,
+			price: 8557
+		},
+		{
+			quantity: 5.08455,
+			price: 8552.75
+		},
+		{
+			quantity: 6.04265932,
+			price: 8552.75
+		},
+		{
+			quantity: 4.8,
+			price: 8551.5
+		},
+		{
+			quantity: 0.75,
+			price: 8551
+		},
+		{
+			quantity: 7.975,
+			price: 8550.5
+		},
+		{
+			quantity: 4.7359,
+			price: 8550
+		},
+		{
+			quantity: 7.436,
+			price: 8543.75
+		},
+		{
+			quantity: 0.00129564,
+			price: 8537.75
+		},
+		{
+			quantity: 5.3067,
+			price: 8536.5
+		},
+		{
+			quantity: 16.38829698,
+			price: 8530.75
+		},
+		{
+			quantity: 0.00038462,
+			price: 8529.75
+		},
+		{
+			quantity: 0.1,
+			price: 8520
+		},
+		{
+			quantity: 0.1,
+			price: 8516
+		},
+		{
+			quantity: 0.05,
+			price: 8510
+		},
+		{
+			quantity: 2.5248,
+			price: 8509.5
+		},
+		{
+			quantity: 20.56699461,
+			price: 8507
+		},
+		{
+			quantity: 5,
+			price: 8505
+		},
+		{
+			quantity: 0.25,
+			price: 8500
+		},
+		{
+			quantity: 0.00962679,
+			price: 8495
+		},
+		{
+			quantity: 0.25,
+			price: 8480
+		},
+		{
+			quantity: 2.49610001,
+			price: 8450
+		},
+		{
+			quantity: 0.1423,
+			price: 8430
+		},
+		{
+			quantity: 0.005,
+			price: 8426
+		},
+		{
+			quantity: 0.3,
+			price: 8425
+		},
+		{
+			quantity: 0.005,
+			price: 8406
+		},
+		{
+			quantity: 2.54695,
+			price: 8400
+		},
+		{
+			quantity: 0.13,
+			price: 8400
+		},
+		{
+			quantity: 0.005,
+			price: 8386
+		},
+		{
+			quantity: 0.97955,
+			price: 8362.25
+		},
+		{
+			quantity: 0.06,
+			price: 8361.5
+		},
+		{
+			quantity: 0.05,
+			price: 8353
+		},
+		{
+			quantity: 0.00666,
+			price: 8351
+		},
+		{
+			quantity: 4.20590821,
+			price: 8345.5
+		},
+		{
+			quantity: 7.02959978,
+			price: 8341.25
+		},
+		{
+			quantity: 6.13545091,
+			price: 8341
+		},
+		{
+			quantity: 0.00666,
+			price: 8321
+		},
+		{
+			quantity: 0.025,
+			price: 8303
+		},
+		{
+			quantity: 5.37142456,
+			price: 8299.5
+		},
+		{
+			quantity: 5.30942191,
+			price: 8291.5
+		},
+		{
+			quantity: 0.01,
+			price: 8286
+		},
+		{
+			quantity: 7.80816491,
+			price: 8281.25
+		},
+		{
+			quantity: 0.72831375,
+			price: 8279.25
+		},
+		{
+			quantity: 3.7880168,
+			price: 8242.75
+		},
+		{
+			quantity: 0.33254372,
+			price: 8235.25
+		},
+		{
+			quantity: 0.3,
+			price: 8225
+		},
+		{
+			quantity: 0.01,
+			price: 8216
+		},
+		{
+			quantity: 8.6970975,
+			price: 8199.75
+		},
+		{
+			quantity: 0.1464,
+			price: 8194
+		},
+		{
+			quantity: 0.015,
+			price: 8186
+		},
+		{
+			quantity: 5.32830415,
+			price: 8155.25
+		},
+		{
+			quantity: 0.015,
+			price: 8146
+		},
+		{
+			quantity: 5.33594257,
+			price: 8142.75
+		},
+		{
+			quantity: 8.45727235,
+			price: 8123.75
+		},
+		{
+			quantity: 4.30492183,
+			price: 8109.5
+		},
+		{
+			quantity: 0.0222,
+			price: 8106
+		},
+		{
+			quantity: 0.05,
+			price: 8103
+		},
+		{
+			quantity: 0.0166,
+			price: 8086
+		},
+		{
+			quantity: 7.53881336,
+			price: 8083.5
+		},
+		{
+			quantity: 0.025,
+			price: 8079
+		},
+		{
+			quantity: 0.05,
+			price: 8053
+		},
+		{
+			quantity: 1.65994144,
+			price: 8047.75
+		},
+		{
+			quantity: 0.03,
+			price: 8046
+		},
+		{
+			quantity: 2.88560413,
+			price: 8041.5
+		},
+		{
+			quantity: 0.025,
+			price: 8029
+		},
+		{
+			quantity: 0.3,
+			price: 8025
+		},
+		{
+			quantity: 8.78615986,
+			price: 8011.75
+		},
+		{
+			quantity: 0.1002,
+			price: 8005
+		},
+		{
+			quantity: 0.05,
+			price: 8003
+		},
+		{
+			quantity: 0.025,
+			price: 8001
+		},
+		{
+			quantity: 1,
+			price: 8000
+		},
+		{
+			quantity: 1,
+			price: 8000
+		},
+		{
+			quantity: 1.35509592,
+			price: 7991.5
+		},
+		{
+			quantity: 5.19894829,
+			price: 7973
+		},
+		{
+			quantity: 0.1508,
+			price: 7958
+		},
+		{
+			quantity: 0.05,
+			price: 7953
+		},
+		{
+			quantity: 2.76045913,
+			price: 7932
+		},
+		{
+			quantity: 6.14579632,
+			price: 7922.25
+		},
+		{
+			quantity: 0.0222,
+			price: 7921
+		},
+		{
+			quantity: 1,
+			price: 7920.25
+		},
+		{
+			quantity: 1.97880393,
+			price: 7911.5
+		},
+		{
+			quantity: 3.21252091,
+			price: 7906.5
+		},
+		{
+			quantity: 7.81911781,
+			price: 7900
+		},
+		{
+			quantity: 0.025,
+			price: 7879
+		},
+		{
+			quantity: 0.03333,
+			price: 7866
+		},
+		{
+			quantity: 0.05,
+			price: 7853
+		},
+		{
+			quantity: 0.1,
+			price: 7850
+		},
+		{
+			quantity: 6.88423161,
+			price: 7846.75
+		},
+		{
+			quantity: 1.05599314,
+			price: 7831.5
+		},
+		{
+			quantity: 0.12,
+			price: 7820
+		},
+		{
+			quantity: 3.60855127,
+			price: 7816.25
+		},
+		{
+			quantity: 4.43298509,
+			price: 7815.5
+		},
+		{
+			quantity: 2.48988175,
+			price: 7813.5
+		},
+		{
+			quantity: 1.19361478,
+			price: 7813
+		},
+		{
+			quantity: 4.46151525,
+			price: 7806.25
+		},
+		{
+			quantity: 0.76936042,
+			price: 7803.25
+		},
+		{
+			quantity: 0.05,
+			price: 7803
+		},
+		{
+			quantity: 1,
+			price: 7800
+		},
+		{
+			quantity: 3.22611102,
+			price: 7754.75
+		},
+		{
+			quantity: 0.05,
+			price: 7753
+		},
+		{
+			quantity: 0.33635236,
+			price: 7750.75
+		},
+		{
+			quantity: 1.6512524,
+			price: 7741.25
+		},
+		{
+			quantity: 0.25,
+			price: 7725
+		},
+		{
+			quantity: 0.1554,
+			price: 7722
+		},
+		{
+			quantity: 4.36636785,
+			price: 7704
+		},
+		{
+			quantity: 0.05,
+			price: 7703
+		},
+		{
+			quantity: 1.81280273,
+			price: 7684.75
+		},
+		{
+			quantity: 0.02,
+			price: 7666
+		},
+		{
+			quantity: 0.05,
+			price: 7653
+		},
+		{
+			quantity: 0.2,
+			price: 7650
+		},
+		{
+			quantity: 3.30851411,
+			price: 7635.5
+		},
+		{
+			quantity: 0.0666,
+			price: 7621
+		},
+		{
+			quantity: 0.0222,
+			price: 7573
+		},
+		{
+			quantity: 3.26200282,
+			price: 7569.5
+		},
+		{
+			quantity: 8.38399994,
+			price: 7556.75
+		},
+		{
+			quantity: 8.86297049,
+			price: 7555.5
+		},
+		{
+			quantity: 0.05,
+			price: 7553
+		},
+		{
+			quantity: 1.59886323,
+			price: 7548.25
+		},
+		{
+			quantity: 4.93351078,
+			price: 7528.5
+		},
+		{
+			quantity: 1,
+			price: 7500
+		},
+		{
+			quantity: 0.4,
+			price: 7500
+		},
+		{
+			quantity: 0.0725,
+			price: 7500
+		},
+		{
+			quantity: 7.49652446,
+			price: 7493.5
+		},
+		{
+			quantity: 0.1603,
+			price: 7486
+		},
+		{
+			quantity: 6.91104363,
+			price: 7481.75
+		},
+		{
+			quantity: 6.55961245,
+			price: 7472.25
+		},
+		{
+			quantity: 4.8190317,
+			price: 7470.5
+		},
+		{
+			quantity: 6.59195064,
+			price: 7445.75
+		},
+		{
+			quantity: 7.88027122,
+			price: 7429.5
+		},
+		{
+			quantity: 5.52457569,
+			price: 7423.5
+		},
+		{
+			quantity: 6.91954674,
+			price: 7423
+		},
+		{
+			quantity: 0.1002,
+			price: 7405
+		},
+		{
+			quantity: 0.31610651,
+			price: 7395.25
+		},
+		{
+			quantity: 1,
+			price: 7395
+		},
+		{
+			quantity: 1,
+			price: 7379.25
+		},
+		{
+			quantity: 8.40830456,
+			price: 7375.25
+		},
+		{
+			quantity: 0.001,
+			price: 7303
+		},
+		{
+			quantity: 0.15,
+			price: 7300
+		},
+		{
+			quantity: 0.0898,
+			price: 7300
+		},
+		{
+			quantity: 0.1002,
+			price: 7300
+		},
+		{
+			quantity: 0.1,
+			price: 7265
+		},
+		{
+			quantity: 1.11858395,
+			price: 7261.75
+		},
+		{
+			quantity: 0.72365824,
+			price: 7252.25
+		},
+		{
+			quantity: 0.05,
+			price: 7250
+		},
+		{
+			quantity: 0.1655,
+			price: 7250
+		},
+		{
+			quantity: 0.00676358,
+			price: 7250
+		},
+		{
+			quantity: 6.5066071,
+			price: 7226.25
+		},
+		{
+			quantity: 3.11734352,
+			price: 7204.25
+		},
+		{
+			quantity: 2.23975312,
+			price: 7203
+		},
+		{
+			quantity: 4.56188633,
+			price: 7201.75
+		},
+		{
+			quantity: 1,
+			price: 7200
+		},
+		{
+			quantity: 5.95529704,
+			price: 7185.75
+		},
+		{
+			quantity: 8.25760072,
+			price: 7182.75
+		},
+		{
+			quantity: 2.41676049,
+			price: 7177.25
+		},
+		{
+			quantity: 5.67575934,
+			price: 7155.5
+		},
+		{
+			quantity: 1,
+			price: 7146.25
+		},
+		{
+			quantity: 7.67541957,
+			price: 7141
+		},
+		{
+			quantity: 2.87169988,
+			price: 7124.5
+		},
+		{
+			quantity: 0.9667266,
+			price: 7120.75
+		},
+		{
+			quantity: 2.72212191,
+			price: 7113.5
+		},
+		{
+			quantity: 8.61874791,
+			price: 7101.5
+		},
+		{
+			quantity: 0.05,
+			price: 7096
+		},
+		{
+			quantity: 3.4698285,
+			price: 7091.5
+		},
+		{
+			quantity: 6.81822348,
+			price: 7074.75
+		},
+		{
+			quantity: 1,
+			price: 7071
+		},
+		{
+			quantity: 1.04271886,
+			price: 7070.5
+		},
+		{
+			quantity: 6.15545789,
+			price: 7030
+		},
+		{
+			quantity: 0.01,
+			price: 7025
+		},
+		{
+			quantity: 0.04,
+			price: 7016
+		},
+		{
+			quantity: 8.002858,
+			price: 7008
+		},
+		{
+			quantity: 1.55246768,
+			price: 7004.5
+		},
+		{
+			quantity: 2.14366492,
+			price: 7004.5
+		},
+		{
+			quantity: 0.05,
+			price: 7003
+		},
+		{
+			quantity: 0.02,
+			price: 7001
+		},
+		{
+			quantity: 5.82086615,
+			price: 6993
+		},
+		{
+			quantity: 0.1717,
+			price: 6990
+		},
+		{
+			quantity: 0.0366,
+			price: 6986
+		},
+		{
+			quantity: 7.74284384,
+			price: 6969
+		},
+		{
+			quantity: 0.05,
+			price: 6951
+		},
+		{
+			quantity: 0.25,
+			price: 6951
+		},
+		{
+			quantity: 2.0142451,
+			price: 6946.25
+		},
+		{
+			quantity: 0.0333,
+			price: 6946
+		},
+		{
+			quantity: 8.65436133,
+			price: 6941.5
+		},
+		{
+			quantity: 2.43550853,
+			price: 6941
+		},
+		{
+			quantity: 2,
+			price: 6925
+		},
+		{
+			quantity: 0.0222,
+			price: 6916
+		},
+		{
+			quantity: 0.0738,
+			price: 6910
+		},
+		{
+			quantity: 0.05,
+			price: 6903
+		},
+		{
+			quantity: 7.11500899,
+			price: 6901.25
+		},
+		{
+			quantity: 0.005,
+			price: 6900
+		},
+		{
+			quantity: 0.0366,
+			price: 6896
+		},
+		{
+			quantity: 0.05,
+			price: 6851
+		},
+		{
+			quantity: 1,
+			price: 6789
+		},
+		{
+			quantity: 0.12,
+			price: 6760
+		},
+		{
+			quantity: 0.1777,
+			price: 6754
+		},
+		{
+			quantity: 0.2,
+			price: 6750
+		},
+		{
+			quantity: 0.0833,
+			price: 6699
+		},
+		{
+			quantity: 0.25,
+			price: 6651
+		},
+		{
+			quantity: 0.1,
+			price: 6600
+		},
+		{
+			quantity: 3,
+			price: 6600
+		},
+		{
+			quantity: 0.05,
+			price: 6600
+		},
+		{
+			quantity: 20,
+			price: 6577
+		},
+		{
+			quantity: 1,
+			price: 6501
+		},
+		{
+			quantity: 0.7908,
+			price: 6500.25
+		},
+		{
+			quantity: 0.5,
+			price: 6500
+		},
+		{
+			quantity: 0.617,
+			price: 6500
+		},
+		{
+			quantity: 0.1,
+			price: 6500
+		},
+		{
+			quantity: 0.45674,
+			price: 6500
+		},
+		{
+			quantity: 0.3,
+			price: 6451
+		},
+		{
+			quantity: 0.1,
+			price: 6400
+		},
+		{
+			quantity: 1,
+			price: 6400
+		},
+		{
+			quantity: 20,
+			price: 6365
+		},
+		{
+			quantity: 1,
+			price: 6303
+		},
+		{
+			quantity: 0.1,
+			price: 6249
+		},
+		{
+			quantity: 0.05,
+			price: 6203
+		},
+		{
+			quantity: 0.05,
+			price: 6103
+		},
+		{
+			quantity: 1,
+			price: 6102
+		},
+		{
+			quantity: 0.05,
+			price: 6051
+		},
+		{
+			quantity: 0.0766,
+			price: 6033
+		},
+		{
+			quantity: 0.05,
+			price: 6003
+		},
+		{
+			quantity: 0.80994,
+			price: 6000.25
+		},
+		{
+			quantity: 0.60788766,
+			price: 6000
+		},
+		{
+			quantity: 0.334,
+			price: 6000
+		},
+		{
+			quantity: 0.1,
+			price: 6000
+		},
+		{
+			quantity: 0.05,
+			price: 5951
+		},
+		{
+			quantity: 0.4,
+			price: 5951
+		},
+		{
+			quantity: 4.75,
+			price: 5950
+		},
+		{
+			quantity: 0.1,
+			price: 5900
+		},
+		{
+			quantity: 0.05,
+			price: 5897
+		},
+		{
+			quantity: 0.001568,
+			price: 5860.5
+		},
+		{
+			quantity: 0.2,
+			price: 5800
+		},
+		{
+			quantity: 11,
+			price: 5796
+		},
+		{
+			quantity: 0.4215,
+			price: 5780
+		},
+		{
+			quantity: 0.3,
+			price: 5751
+		},
+		{
+			quantity: 0.05,
+			price: 5750
+		},
+		{
+			quantity: 0.23330845,
+			price: 5750
+		},
+		{
+			quantity: 0.796,
+			price: 5750
+		},
+		{
+			quantity: 0.2,
+			price: 5719.5
+		},
+		{
+			quantity: 0.1,
+			price: 5700
+		},
+		{
+			quantity: 0.1,
+			price: 5565.75
+		},
+		{
+			quantity: 0.37,
+			price: 5520
+		},
+		{
+			quantity: 1,
+			price: 5509
+		},
+		{
+			quantity: 0.48782676,
+			price: 5500
+		},
+		{
+			quantity: 0.21,
+			price: 5428
+		},
+		{
+			quantity: 0.3,
+			price: 5351
+		},
+		{
+			quantity: 1,
+			price: 5309
+		},
+		{
+			quantity: 0.4,
+			price: 5300
+		},
+		{
+			quantity: 0.0315,
+			price: 5200
+		},
+		{
+			quantity: 2,
+			price: 5165
+		},
+		{
+			quantity: 1,
+			price: 5109
+		},
+		{
+			quantity: 1,
+			price: 5065
+		},
+		{
+			quantity: 0.80491416,
+			price: 5000
+		},
+		{
+			quantity: 0.62,
+			price: 5000
+		},
+		{
+			quantity: 1.5,
+			price: 4918
+		},
+		{
+			quantity: 2,
+			price: 4899
+		},
+		{
+			quantity: 2,
+			price: 4802
+		},
+		{
+			quantity: 1.5,
+			price: 4720
+		},
+		{
+			quantity: 0.5,
+			price: 4690
+		},
+		{
+			quantity: 0.1,
+			price: 4505.25
+		},
+		{
+			quantity: 1.49058178,
+			price: 4500
+		},
+		{
+			quantity: 0.98,
+			price: 4420
+		},
+		{
+			quantity: 1.5,
+			price: 4289
+		},
+		{
+			quantity: 0.016897,
+			price: 4125.5
+		},
+		{
+			quantity: 2,
+			price: 4123.25
+		},
+		{
+			quantity: 0.03,
+			price: 4031
+		},
+		{
+			quantity: 0.1002,
+			price: 4030
+		},
+		{
+			quantity: 0.015341,
+			price: 4025.5
+		},
+		{
+			quantity: 2.3476663,
+			price: 4000
+		},
+		{
+			quantity: 2,
+			price: 4000
+		},
+		{
+			quantity: 0.003006,
+			price: 3989
+		},
+		{
+			quantity: 1,
+			price: 3980
+		},
+		{
+			quantity: 0.445,
+			price: 3900
+		},
+		{
+			quantity: 0.2,
+			price: 3751
+		},
+		{
+			quantity: 5.98,
+			price: 3680
+		},
+		{
+			quantity: 7.5,
+			price: 3600
+		},
+		{
+			quantity: 0.2,
+			price: 3502
+		},
+		{
+			quantity: 1.545,
+			price: 3501
+		},
+		{
+			quantity: 0.00571429,
+			price: 3500
+		},
+		{
+			quantity: 0.25,
+			price: 3500
+		},
+		{
+			quantity: 0.05,
+			price: 3500
+		},
+		{
+			quantity: 0.76658491,
+			price: 3500
+		},
+		{
+			quantity: 0.3,
+			price: 3402
+		},
+		{
+			quantity: 0.2532,
+			price: 3340
+		},
+		{
+			quantity: 0.2532,
+			price: 3340
+		},
+		{
+			quantity: 0.2532,
+			price: 3340
+		},
+		{
+			quantity: 0.2532,
+			price: 3340
+		},
+		{
+			quantity: 0.2532,
+			price: 3340
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 3,
+			price: 3300
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 0.011,
+			price: 3298.01
+		},
+		{
+			quantity: 1,
+			price: 3278.81
+		},
+		{
+			quantity: 1,
+			price: 3278.81
+		},
+		{
+			quantity: 0.043,
+			price: 3250
+		},
+		{
+			quantity: 0.2,
+			price: 3205
+		},
+		{
+			quantity: 1,
+			price: 3204
+		},
+		{
+			quantity: 1,
+			price: 3204
+		},
+		{
+			quantity: 1,
+			price: 3204
+		},
+		{
+			quantity: 0.0096,
+			price: 3201
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 0.00625,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 3,
+			price: 3200
+		},
+		{
+			quantity: 1.5,
+			price: 3130
+		},
+		{
+			quantity: 3,
+			price: 3100
+		},
+		{
+			quantity: 3,
+			price: 3100
+		},
+		{
+			quantity: 3,
+			price: 3100
+		},
+		{
+			quantity: 1,
+			price: 3100
+		},
+		{
+			quantity: 1.1,
+			price: 3100
+		},
+		{
+			quantity: 3,
+			price: 3100
+		},
+		{
+			quantity: 2.23587267,
+			price: 3000
+		},
+		{
+			quantity: 0.00666667,
+			price: 3000
+		},
+		{
+			quantity: 3,
+			price: 2957.21
+		},
+		{
+			quantity: 5,
+			price: 2700
+		},
+		{
+			quantity: 3,
+			price: 2501
+		},
+		{
+			quantity: 1.60982832,
+			price: 2500
+		},
+		{
+			quantity: 1,
+			price: 2150
+		},
+		{
+			quantity: 6,
+			price: 2127.24
+		},
+		{
+			quantity: 4.0245708,
+			price: 2000
+		},
+		{
+			quantity: 0.3333,
+			price: 1800
+		},
+		{
+			quantity: 2,
+			price: 1554.4
+		},
+		{
+			quantity: 10,
+			price: 1523.89
+		},
+		{
+			quantity: 5.5,
+			price: 1500
+		},
+		{
+			quantity: 24,
+			price: 1500
+		},
+		{
+			quantity: 6.26044347,
+			price: 1500
+		},
+		{
+			quantity: 40,
+			price: 999
+		},
+		{
+			quantity: 18,
+			price: 895.67
+		},
+		{
+			quantity: 0.02,
+			price: 79.6
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.00001,
+			price: 5.5
+		},
+		{
+			quantity: 0.0009,
+			price: 5
+		}
+	];
+	var asks = [
+		{
+			quantity: 2,
+			price: 8598.25
+		},
+		{
+			quantity: 1,
+			price: 8598.5
+		},
+		{
+			quantity: 1,
+			price: 8600.25
+		},
+		{
+			quantity: 1.156,
+			price: 8600.75
+		},
+		{
+			quantity: 0.1999,
+			price: 8601.25
+		},
+		{
+			quantity: 0.78760139,
+			price: 8601.5
+		},
+		{
+			quantity: 1,
+			price: 8603.5
+		},
+		{
+			quantity: 7.5,
+			price: 8603.75
+		},
+		{
+			quantity: 2,
+			price: 8605.25
+		},
+		{
+			quantity: 2,
+			price: 8606.25
+		},
+		{
+			quantity: 0.025,
+			price: 8606.5
+		},
+		{
+			quantity: 1,
+			price: 8607.25
+		},
+		{
+			quantity: 1.89144292,
+			price: 8609
+		},
+		{
+			quantity: 8.0196,
+			price: 8610.25
+		},
+		{
+			quantity: 2.50265388,
+			price: 8610.5
+		},
+		{
+			quantity: 1,
+			price: 8613.25
+		},
+		{
+			quantity: 0.025,
+			price: 8615
+		},
+		{
+			quantity: 5,
+			price: 8616.75
+		},
+		{
+			quantity: 4.776,
+			price: 8616.75
+		},
+		{
+			quantity: 0.1,
+			price: 8617.25
+		},
+		{
+			quantity: 0.50739999,
+			price: 8621.75
+		},
+		{
+			quantity: 0.025,
+			price: 8622
+		},
+		{
+			quantity: 7.6104,
+			price: 8623.75
+		},
+		{
+			quantity: 0.8658,
+			price: 8624.75
+		},
+		{
+			quantity: 0.1,
+			price: 8626
+		},
+		{
+			quantity: 3.92539519,
+			price: 8628.25
+		},
+		{
+			quantity: 17.5338,
+			price: 8630
+		},
+		{
+			quantity: 6.3,
+			price: 8630.25
+		},
+		{
+			quantity: 0.00029586,
+			price: 8632
+		},
+		{
+			quantity: 0.025,
+			price: 8634.25
+		},
+		{
+			quantity: 0.75,
+			price: 8634.5
+		},
+		{
+			quantity: 4.895,
+			price: 8636.75
+		},
+		{
+			quantity: 0.9794,
+			price: 8639.25
+		},
+		{
+			quantity: 15.854,
+			price: 8641
+		},
+		{
+			quantity: 0.75,
+			price: 8643
+		},
+		{
+			quantity: 5.08455,
+			price: 8644.75
+		},
+		{
+			quantity: 6.61988528,
+			price: 8645.5
+		},
+		{
+			quantity: 0.025,
+			price: 8646
+		},
+		{
+			quantity: 8.689,
+			price: 8655.5
+		},
+		{
+			quantity: 0.025,
+			price: 8655.75
+		},
+		{
+			quantity: 16.45,
+			price: 8656.25
+		},
+		{
+			quantity: 0.00099854,
+			price: 8663
+		},
+		{
+			quantity: 15.32508986,
+			price: 8667
+		},
+		{
+			quantity: 17.098,
+			price: 8673
+		},
+		{
+			quantity: 0.025,
+			price: 8683.25
+		},
+		{
+			quantity: 21.17194238,
+			price: 8688.5
+		},
+		{
+			quantity: 0.025,
+			price: 8690
+		},
+		{
+			quantity: 3.9,
+			price: 8691
+		},
+		{
+			quantity: 0.025,
+			price: 8699
+		},
+		{
+			quantity: 2.5248,
+			price: 8702.25
+		},
+		{
+			quantity: 0.025,
+			price: 8712.25
+		},
+		{
+			quantity: 0.025,
+			price: 8717.75
+		},
+		{
+			quantity: 0.025,
+			price: 8727
+		},
+		{
+			quantity: 4.52265273,
+			price: 8729.75
+		},
+		{
+			quantity: 0.0249,
+			price: 8730.75
+		},
+		{
+			quantity: 0.025,
+			price: 8733.25
+		},
+		{
+			quantity: 0.025,
+			price: 8734
+		},
+		{
+			quantity: 0.025,
+			price: 8734.5
+		},
+		{
+			quantity: 0.025,
+			price: 8743.5
+		},
+		{
+			quantity: 0.025,
+			price: 8746
+		},
+		{
+			quantity: 0.0199,
+			price: 8748.25
+		},
+		{
+			quantity: 0.61,
+			price: 8750
+		},
+		{
+			quantity: 0.0079,
+			price: 8754.75
+		},
+		{
+			quantity: 0.3,
+			price: 8760.5
+		},
+		{
+			quantity: 0.025,
+			price: 8762
+		},
+		{
+			quantity: 7.64445735,
+			price: 8764.75
+		},
+		{
+			quantity: 7.30775863,
+			price: 8767.75
+		},
+		{
+			quantity: 0.3,
+			price: 8767.75
+		},
+		{
+			quantity: 0.3,
+			price: 8775
+		},
+		{
+			quantity: 0.3,
+			price: 8775.25
+		},
+		{
+			quantity: 0.3,
+			price: 8775.5
+		},
+		{
+			quantity: 0.3,
+			price: 8775.75
+		},
+		{
+			quantity: 4.2023681,
+			price: 8779.25
+		},
+		{
+			quantity: 0.0236,
+			price: 8780
+		},
+		{
+			quantity: 0.025,
+			price: 8780.5
+		},
+		{
+			quantity: 0.025,
+			price: 8782.75
+		},
+		{
+			quantity: 1.78088863,
+			price: 8785
+		},
+		{
+			quantity: 0.0211,
+			price: 8785.75
+		},
+		{
+			quantity: 8.45030505,
+			price: 8785.75
+		},
+		{
+			quantity: 8.16888336,
+			price: 8789
+		},
+		{
+			quantity: 0.025,
+			price: 8799.75
+		},
+		{
+			quantity: 3.13977205,
+			price: 8799.75
+		},
+		{
+			quantity: 0.025,
+			price: 8800
+		},
+		{
+			quantity: 0.025,
+			price: 8800
+		},
+		{
+			quantity: 0.025,
+			price: 8804
+		},
+		{
+			quantity: 0.025,
+			price: 8809
+		},
+		{
+			quantity: 0.025,
+			price: 8815
+		},
+		{
+			quantity: 0.025,
+			price: 8821.75
+		},
+		{
+			quantity: 3.87805058,
+			price: 8824.5
+		},
+		{
+			quantity: 1.5,
+			price: 8838
+		},
+		{
+			quantity: 0.025,
+			price: 8842.5
+		},
+		{
+			quantity: 5.53646042,
+			price: 8845.5
+		},
+		{
+			quantity: 0.025,
+			price: 8849.25
+		},
+		{
+			quantity: 1,
+			price: 8850
+		},
+		{
+			quantity: 0.025,
+			price: 8855.5
+		},
+		{
+			quantity: 0.59512974,
+			price: 8859.5
+		},
+		{
+			quantity: 0.025,
+			price: 8861.5
+		},
+		{
+			quantity: 8.06059171,
+			price: 8872
+		},
+		{
+			quantity: 0.1348,
+			price: 8888.25
+		},
+		{
+			quantity: 0.025,
+			price: 8895.25
+		},
+		{
+			quantity: 0.54690645,
+			price: 8898.5
+		},
+		{
+			quantity: 0.1,
+			price: 8900
+		},
+		{
+			quantity: 0.025,
+			price: 8908.5
+		},
+		{
+			quantity: 6.14071812,
+			price: 8918
+		},
+		{
+			quantity: 3.26663801,
+			price: 8929
+		},
+		{
+			quantity: 0.99,
+			price: 8953
+		},
+		{
+			quantity: 1,
+			price: 8960
+		},
+		{
+			quantity: 0.03,
+			price: 8995.75
+		},
+		{
+			quantity: 1,
+			price: 9000
+		},
+		{
+			quantity: 0.05,
+			price: 9000
+		},
+		{
+			quantity: 0.5,
+			price: 9000
+		},
+		{
+			quantity: 0.05,
+			price: 9000
+		},
+		{
+			quantity: 0.02,
+			price: 9000
+		},
+		{
+			quantity: 0.99,
+			price: 9033
+		},
+		{
+			quantity: 3.86543066,
+			price: 9035.25
+		},
+		{
+			quantity: 0.77058463,
+			price: 9035.75
+		},
+		{
+			quantity: 9.36487095,
+			price: 9047.25
+		},
+		{
+			quantity: 1,
+			price: 9050
+		},
+		{
+			quantity: 2.78284274,
+			price: 9060.5
+		},
+		{
+			quantity: 0.3,
+			price: 9061.5
+		},
+		{
+			quantity: 6.63722321,
+			price: 9063.75
+		},
+		{
+			quantity: 1.09982,
+			price: 9075.5
+		},
+		{
+			quantity: 0.03,
+			price: 9095.75
+		},
+		{
+			quantity: 8.22031307,
+			price: 9100.25
+		},
+		{
+			quantity: 8.78205147,
+			price: 9102.75
+		},
+		{
+			quantity: 0.99,
+			price: 9123
+		},
+		{
+			quantity: 6.96649807,
+			price: 9127.5
+		},
+		{
+			quantity: 0.2,
+			price: 9133
+		},
+		{
+			quantity: 0.1313,
+			price: 9138
+		},
+		{
+			quantity: 4.72634357,
+			price: 9141.75
+		},
+		{
+			quantity: 9.22007979,
+			price: 9147.75
+		},
+		{
+			quantity: 0.54076365,
+			price: 9155.5
+		},
+		{
+			quantity: 3.7687145,
+			price: 9173.25
+		},
+		{
+			quantity: 6.6568141,
+			price: 9187.75
+		},
+		{
+			quantity: 1,
+			price: 9210.5
+		},
+		{
+			quantity: 1,
+			price: 9213
+		},
+		{
+			quantity: 4.15310459,
+			price: 9229
+		},
+		{
+			quantity: 0.99,
+			price: 9233
+		},
+		{
+			quantity: 5.2200603,
+			price: 9250.25
+		},
+		{
+			quantity: 1.02222156,
+			price: 9254.75
+		},
+		{
+			quantity: 0.03,
+			price: 9285.25
+		},
+		{
+			quantity: 50,
+			price: 9300
+		},
+		{
+			quantity: 0.2,
+			price: 9333
+		},
+		{
+			quantity: 0.99,
+			price: 9333
+		},
+		{
+			quantity: 4.95653048,
+			price: 9357.5
+		},
+		{
+			quantity: 2.41613351,
+			price: 9368
+		},
+		{
+			quantity: 2.66074677,
+			price: 9378.5
+		},
+		{
+			quantity: 1,
+			price: 9398
+		},
+		{
+			quantity: 0.02,
+			price: 9400
+		},
+		{
+			quantity: 4.9669361,
+			price: 9405.5
+		},
+		{
+			quantity: 4.62442723,
+			price: 9413.25
+		},
+		{
+			quantity: 0.99,
+			price: 9445
+		},
+		{
+			quantity: 1.63497404,
+			price: 9445.5
+		},
+		{
+			quantity: 4.01780446,
+			price: 9446.75
+		},
+		{
+			quantity: 5.35058758,
+			price: 9456.75
+		},
+		{
+			quantity: 0.50097919,
+			price: 9485.25
+		},
+		{
+			quantity: 1,
+			price: 9488.5
+		},
+		{
+			quantity: 0.5,
+			price: 9500
+		},
+		{
+			quantity: 0.05,
+			price: 9500
+		},
+		{
+			quantity: 0.0505,
+			price: 9500
+		},
+		{
+			quantity: 0.99,
+			price: 9505
+		},
+		{
+			quantity: 5.25291271,
+			price: 9518.25
+		},
+		{
+			quantity: 5.69274158,
+			price: 9524
+		},
+		{
+			quantity: 8.58031953,
+			price: 9524.5
+		},
+		{
+			quantity: 2.20042961,
+			price: 9527.5
+		},
+		{
+			quantity: 0.2,
+			price: 9527.75
+		},
+		{
+			quantity: 1.86458473,
+			price: 9550.5
+		},
+		{
+			quantity: 1.57994925,
+			price: 9554.75
+		},
+		{
+			quantity: 0.97820212,
+			price: 9592.25
+		},
+		{
+			quantity: 7.04964386,
+			price: 9605.5
+		},
+		{
+			quantity: 5.74740971,
+			price: 9606.25
+		},
+		{
+			quantity: 0.99,
+			price: 9615
+		},
+		{
+			quantity: 9.09577748,
+			price: 9633.75
+		},
+		{
+			quantity: 7.92565804,
+			price: 9635.25
+		},
+		{
+			quantity: 9.16868423,
+			price: 9666.5
+		},
+		{
+			quantity: 9.35624277,
+			price: 9688
+		},
+		{
+			quantity: 7.5242153,
+			price: 9689.5
+		},
+		{
+			quantity: 6.93216412,
+			price: 9694.75
+		},
+		{
+			quantity: 0.61262845,
+			price: 9705.75
+		},
+		{
+			quantity: 8.34734839,
+			price: 9715.25
+		},
+		{
+			quantity: 4.01753179,
+			price: 9723
+		},
+		{
+			quantity: 0.99,
+			price: 9725
+		},
+		{
+			quantity: 0.5,
+			price: 9733
+		},
+		{
+			quantity: 4.39565355,
+			price: 9743.5
+		},
+		{
+			quantity: 9.04885396,
+			price: 9779.5
+		},
+		{
+			quantity: 0.02,
+			price: 9788.75
+		},
+		{
+			quantity: 5,
+			price: 9824.25
+		},
+		{
+			quantity: 5.12117054,
+			price: 9827.25
+		},
+		{
+			quantity: 7.89247023,
+			price: 9829
+		},
+		{
+			quantity: 0.43442068,
+			price: 9829
+		},
+		{
+			quantity: 0.1,
+			price: 9830
+		},
+		{
+			quantity: 0.99,
+			price: 9845
+		},
+		{
+			quantity: 6.75146806,
+			price: 9849.25
+		},
+		{
+			quantity: 6.44008925,
+			price: 9874.5
+		},
+		{
+			quantity: 9.36430042,
+			price: 9895
+		},
+		{
+			quantity: 8.97502793,
+			price: 9901.5
+		},
+		{
+			quantity: 1,
+			price: 9926.75
+		},
+		{
+			quantity: 0.99,
+			price: 9945
+		},
+		{
+			quantity: 0.05,
+			price: 9950
+		},
+		{
+			quantity: 0.03,
+			price: 9966.75
+		},
+		{
+			quantity: 1,
+			price: 9996
+		},
+		{
+			quantity: 2,
+			price: 9998
+		},
+		{
+			quantity: 1,
+			price: 9999
+		},
+		{
+			quantity: 1,
+			price: 10000
+		},
+		{
+			quantity: 0.05,
+			price: 10000
+		},
+		{
+			quantity: 0.99,
+			price: 10015
+		},
+		{
+			quantity: 0.65086231,
+			price: 10022.75
+		},
+		{
+			quantity: 8.15990661,
+			price: 10031.5
+		},
+		{
+			quantity: 1,
+			price: 10033
+		},
+		{
+			quantity: 0.0005,
+			price: 10036.06
+		},
+		{
+			quantity: 7.82675239,
+			price: 10072.5
+		},
+		{
+			quantity: 3.20737719,
+			price: 10097.25
+		},
+		{
+			quantity: 0.31094544,
+			price: 10137.5
+		},
+		{
+			quantity: 7.97062916,
+			price: 10174.5
+		},
+		{
+			quantity: 5.85539014,
+			price: 10186.5
+		},
+		{
+			quantity: 2.42932855,
+			price: 10188.75
+		},
+		{
+			quantity: 2.75150551,
+			price: 10191.75
+		},
+		{
+			quantity: 3.31217358,
+			price: 10231.75
+		},
+		{
+			quantity: 0.66629103,
+			price: 10240.5
+		},
+		{
+			quantity: 5.15899872,
+			price: 10241.25
+		},
+		{
+			quantity: 5.16471234,
+			price: 10246.75
+		},
+		{
+			quantity: 4.54589133,
+			price: 10262.25
+		},
+		{
+			quantity: 7.49115103,
+			price: 10263.75
+		},
+		{
+			quantity: 2.29124818,
+			price: 10271.75
+		},
+		{
+			quantity: 0.1,
+			price: 10450
+		},
+		{
+			quantity: 0.99,
+			price: 10480
+		},
+		{
+			quantity: 1.8,
+			price: 10500
+		},
+		{
+			quantity: 1.19,
+			price: 11220
+		},
+		{
+			quantity: 0.5,
+			price: 12500
+		},
+		{
+			quantity: 0.1,
+			price: 14979.75
+		},
+		{
+			quantity: 0.1693,
+			price: 19000
+		},
+		{
+			quantity: 0.0003,
+			price: 19720
+		},
+		{
+			quantity: 0.0002,
+			price: 29404.51
+		},
+		{
+			quantity: 0.0001,
+			price: 39089.02
+		},
+		{
+			quantity: 0.0001,
+			price: 48772.97
+		},
+		{
+			quantity: 0.0001,
+			price: 58456.91
+		},
+		{
+			quantity: 1,
+			price: 95000
+		}
+	];
+	var ticker = [
+		{
+			intervalStart: "2019-05-30T02:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 8597,
+			ask: 8598.25,
+			open: 8631.25,
+			high: 8758.5,
+			low: 8446,
+			close: 8601.75,
+			volume: 806.06694261,
+			tickerSymbol: "XBTUSD",
+			currentTime: "2019-05-30 02:21:53 am UTC"
+		},
+		{
+			intervalStart: "2019-05-30T01:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8688.75,
+			high: 8730.75,
+			low: 8565,
+			close: 8631.75,
+			volume: 133.3746611
+		},
+		{
+			intervalStart: "2019-05-30T00:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8664.25,
+			high: 8685.25,
+			low: 8612.5,
+			close: 8677.75,
+			volume: 39.99788709
+		},
+		{
+			intervalStart: "2019-05-29T23:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8674.25,
+			high: 8688.75,
+			low: 8632.5,
+			close: 8658.5,
+			volume: 21.87563082
+		},
+		{
+			intervalStart: "2019-05-29T22:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8666.5,
+			high: 8700.5,
+			low: 8666.5,
+			close: 8671.5,
+			volume: 25.67859913
+		},
+		{
+			intervalStart: "2019-05-29T21:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8639,
+			high: 8677.5,
+			low: 8637.25,
+			close: 8659.75,
+			volume: 4.47731457
+		},
+		{
+			intervalStart: "2019-05-29T20:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8700.25,
+			high: 8717,
+			low: 8624.25,
+			close: 8647,
+			volume: 99.29866222
+		},
+		{
+			intervalStart: "2019-05-29T19:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8689.75,
+			high: 8707,
+			low: 8689,
+			close: 8699.5,
+			volume: 12.77111635
+		},
+		{
+			intervalStart: "2019-05-29T18:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8686.5,
+			high: 8710,
+			low: 8668.25,
+			close: 8683.25,
+			volume: 20.34916787
+		},
+		{
+			intervalStart: "2019-05-29T17:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8729.5,
+			high: 8745.75,
+			low: 8683.75,
+			close: 8683.75,
+			volume: 36.87818
+		},
+		{
+			intervalStart: "2019-05-29T16:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8701.5,
+			high: 8748.25,
+			low: 8651.5,
+			close: 8729.5,
+			volume: 44.9006507
+		},
+		{
+			intervalStart: "2019-05-29T15:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8708.25,
+			high: 8731,
+			low: 8678,
+			close: 8702.5,
+			volume: 38.97254839
+		},
+		{
+			intervalStart: "2019-05-29T14:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8741.5,
+			high: 8754.75,
+			low: 8705,
+			close: 8707.25,
+			volume: 18.77094983
+		},
+		{
+			intervalStart: "2019-05-29T13:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8652.75,
+			high: 8758.5,
+			low: 8640,
+			close: 8741.25,
+			volume: 81.52254775
+		},
+		{
+			intervalStart: "2019-05-29T12:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8632.25,
+			high: 8654,
+			low: 8629,
+			close: 8653,
+			volume: 29.17172898
+		},
+		{
+			intervalStart: "2019-05-29T11:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8667.75,
+			high: 8671.5,
+			low: 8633,
+			close: 8633,
+			volume: 16.33206516
+		},
+		{
+			intervalStart: "2019-05-29T10:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8626.25,
+			high: 8686.25,
+			low: 8626.25,
+			close: 8672.75,
+			volume: 12.31042201
+		},
+		{
+			intervalStart: "2019-05-29T09:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8608,
+			high: 8619.75,
+			low: 8565.75,
+			close: 8619.75,
+			volume: 11.54511361
+		},
+		{
+			intervalStart: "2019-05-29T08:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8529.75,
+			high: 8621.75,
+			low: 8525.75,
+			close: 8600.5,
+			volume: 21.82773607
+		},
+		{
+			intervalStart: "2019-05-29T07:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8530,
+			high: 8568.5,
+			low: 8530,
+			close: 8552.75,
+			volume: 11.69270885
+		},
+		{
+			intervalStart: "2019-05-29T06:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8468.25,
+			high: 8536,
+			low: 8468.25,
+			close: 8471.5,
+			volume: 13.11493707
+		},
+		{
+			intervalStart: "2019-05-29T05:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8588.5,
+			high: 8591,
+			low: 8446,
+			close: 8483,
+			volume: 12.00679491
+		},
+		{
+			intervalStart: "2019-05-29T04:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8649.625,
+			high: 8649.75,
+			low: 8531,
+			close: 8584.25,
+			volume: 31.86634167
+		},
+		{
+			intervalStart: "2019-05-29T03:00:00.0000000+00:00",
+			intervalInMinutes: 60,
+			change: 0,
+			bid: 0,
+			ask: 0,
+			open: 8638.25,
+			high: 8661,
+			low: 8620.75,
+			close: 8645.75,
+			volume: 32.31964117
+		}
+	];
+	var depthMultiplier = 0.2;
+	var orders = {
+		bids: bids,
+		asks: asks,
+		ticker: ticker,
+		depthMultiplier: depthMultiplier
 	};
 
-	Sample.propTypes = {
-	  message: reactProptypes.string
-	};
-
-	var title = "test";
-	console.log("staart?");
+	console.log("staart?", orders);
 
 	var App = function App() {
 	  return react.createElement("div", {
 	    id: "hi"
-	  }, react.createElement("div", null, title, " WTF"), react.createElement(Sample, null));
+	  }, react.createElement(Sample, {
+	    orders: orders
+	  }));
 	};
 
 	reactDom.render(react.createElement(App, null), document.getElementById("main"));

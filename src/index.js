@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Sample from './components/Sample';
+import Orderbook from './components/Orderbook';
+import orders from '../data/sample.json';
 
 const title = "test";
 
-console.log("staart?")
+console.log("staart?", orders)
 
 const App = () => (
   <div id="hi">
-    <div>{title} WTF</div>
-    <Sample />
+    <Orderbook orders={orders} />
   </div>
 );
 

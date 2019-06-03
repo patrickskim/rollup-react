@@ -1,12 +1,33 @@
 .Sample-module_Sample__Mmj22 {
-  background: green; }
-  .Sample-module_Sample__Mmj22 .Sample-module_sub-child__3zCbK {
-    color: blue; }
-  .Sample-module_Sample__Mmj22 p {
-    color: orange; }
-
-p {
-  background: yellow; }
-
-.Sample-module_other__dEqz3 {
-  color: red; }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  line-height: 1em; }
+  .Sample-module_Sample__Mmj22 tbody {
+    position: relative;
+    margin: 10px 0; }
+  .Sample-module_Sample__Mmj22 th {
+    background: red;
+    padding: 15px 0; }
+  .Sample-module_Sample__Mmj22 td {
+    position: relative;
+    padding: 7px 0;
+    text-align: center; }
+    .Sample-module_Sample__Mmj22 td:first-child {
+      text-align: left; }
+    .Sample-module_Sample__Mmj22 td:last-child {
+      color: blue;
+      text-align: right; }
+  .Sample-module_Sample__Mmj22 .Sample-module_asks__Ok8OE td:first-child {
+    color: green; }
+  .Sample-module_Sample__Mmj22 .Sample-module_bids__2iawl td:first-child {
+    color: red; }
+  .Sample-module_Sample__Mmj22 .Sample-module_avg__27n9x {
+    font-size: 20px;
+    text-align: center; }
+    .Sample-module_Sample__Mmj22 .Sample-module_avg__27n9x td {
+      padding: 15px 0;
+      font-size: 20px;
+      text-align: center;
+      border: 2px solid #eee;
+      border-left: 0;
+      border-right: 0; }
