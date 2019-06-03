@@ -23,6 +23,7 @@ Noticed the semi-hidden complexity of rolling up pricing.
 It is preferred that filtering and roll-up calculation be handled server-side.
 
 Outside of a time constraints:
+- Normalize CSS for basic layouts, create shared variable, utils, scss to share common style attributes. (i.e. color, font)
 - Organize files into seperate components. App, Updater, Orderbook, TableRow.
 - Consider generalizing `<TableRow />` to dynamically spread `props` so that it can display `n` columns.
 - Consider spreading `orders` across `<Orderbook {...orders} />`.

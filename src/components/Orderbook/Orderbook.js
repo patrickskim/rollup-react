@@ -65,18 +65,18 @@ const Orderbook = (props) => {
   const asks = renderRows(orders.asks, viewLimit);
 
   return (
-    <div className={styles.Sample}>
+    <table className={styles.Orderbook}>
       <thead>
         <th>Price (USDT)</th>
         <th>Amount (BTC)</th>
         <th>Total</th>
       </thead>
-      <tbody className={styles.bids}>{bids}</tbody>
+      <tbody className={styles.bids}>{bids.reverse()}</tbody>
       <tr className={styles.avg}>
-        <td colspan={3}>{fmtUSD(avg)}</td>
+        <td colspan={3}>{fmt$(avg)}</td>
       </tr>
       <tbody className={styles.asks}>{asks}</tbody>
-    </div>
+    </table>
   );
 };
 

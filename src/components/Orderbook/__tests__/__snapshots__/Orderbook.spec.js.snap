@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Orderbook /> renders correctly 1`] = `
-<div
-  className="Sample"
+<table
+  className="Orderbook"
 >
   <thead>
     <th>
@@ -24,11 +24,11 @@ exports[`<Orderbook /> renders correctly 1`] = `
     <td
       colspan={3}
     >
-      0.00
+      $0.00
     </td>
   </tr>
   <tbody
     className="asks"
   />
-</div>
+</table>
 `;
